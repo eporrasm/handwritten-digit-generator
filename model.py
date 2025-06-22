@@ -3,11 +3,11 @@ from torch import nn
 
 # Define the same Generator class you used for training
 class Generator(nn.Module):
-    def __init__(self, z_dim=100, label_dim=10, img_dim=28 * 28):
+    def __init__(self, z_dim=100, label_dim=10, embed_dim=50, img_dim=28 * 28):
         super().__init__()
-        self.label_emb = nn.Embedding(label_dim, label_dim)
+        self.label_embed = nn.Embedding(label_dim, embed_dim)
         self.net = nn.Sequential(
-            nn.Linear(z_dim + label_dim, 256),
+            nn.Linear(z_dim + embed_dim, 256),
             nn.BatchNorm1d(256),
             nn.ReLU(True),
             nn.Linear(256, 512),
@@ -21,7 +21,7 @@ class Generator(nn.Module):
         )
 
     def forward(self, z, labels):
-        embedded = self.label_emb(labels)
+        embedded = self.label_embed(labels)
         x = torch.cat([z, embedded], dim=1)
         img = self.net(x)
         return img.view(-1, 1, 28, 28)
