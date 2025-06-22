@@ -37,4 +37,4 @@ if st.button("Generate images"):
         img_pil = Image.fromarray(img_uint8, mode='L')
 
         with cols[i]:
-            st.image(img_pil, caption=f"Sample {i+1}", use_column_width=True)
+            st.image(img_pil, caption=f"Sample {i+1}", use_container_width=True)
